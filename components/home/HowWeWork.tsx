@@ -20,10 +20,10 @@ function HowWeWorkFlow() {
         <defs>
           <path id={FLOW_PATH_ID} d={FLOW_PATH} />
           <linearGradient id="how-we-work-beam-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(0, 0, 0, 0)" />
-            <stop offset="30%" stopColor="rgba(0, 0, 0, 0.55)" />
-            <stop offset="70%" stopColor="rgba(0, 0, 0, 0.55)" />
-            <stop offset="100%" stopColor="rgba(0, 0, 0, 0)" />
+            <stop offset="0%" stopColor="transparent" />
+            <stop offset="30%" stopColor="color-mix(in srgb, var(--text-primary) 55%, transparent)" />
+            <stop offset="70%" stopColor="color-mix(in srgb, var(--text-primary) 55%, transparent)" />
+            <stop offset="100%" stopColor="transparent" />
           </linearGradient>
           <filter id="how-we-work-pulse-glow" x="-100%" y="-100%" width="300%" height="300%">
             <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
@@ -38,8 +38,8 @@ function HowWeWorkFlow() {
           href={`#${FLOW_PATH_ID}`}
           className="how-we-work-flow-track"
           fill="none"
-          stroke="rgba(0, 0, 0, 0.07)"
-          strokeWidth="1.5"
+          stroke="color-mix(in srgb, #E87613 35%, transparent)"
+          strokeWidth="2"
           strokeLinecap="round"
         />
 
@@ -50,8 +50,8 @@ function HowWeWorkFlow() {
             cy={40}
             r="5"
             className="how-we-work-flow-node"
-            fill="#EFEBE5"
-            stroke="rgba(0, 0, 0, 0.12)"
+            fill="#E87613"
+            stroke="#E87613"
             strokeWidth="1.5"
             style={{ animationDelay: `${index * 1.5}s` }}
           />
@@ -67,7 +67,7 @@ function HowWeWorkFlow() {
         />
 
         <g className="how-we-work-flow-pulse" filter="url(#how-we-work-pulse-glow)">
-          <circle r="4.5" fill="#000000" />
+          <circle r="4.5" fill="var(--text-primary)" />
           <animateMotion
             dur="4.5s"
             repeatCount="indefinite"
@@ -80,7 +80,7 @@ function HowWeWorkFlow() {
         </g>
 
         <g className="how-we-work-flow-pulse how-we-work-flow-pulse--trail">
-          <circle r="2.5" fill="#000000" opacity="0.18" />
+          <circle r="2.5" fill="var(--text-primary)" opacity="0.18" />
           <animateMotion
             dur="4.5s"
             repeatCount="indefinite"
@@ -131,7 +131,7 @@ const steps = [
 
 export default function HowWeWork() {
   return (
-    <Section>
+    <Section className="how-we-work-section">
       <Container>
         <div>
           <Reveal preset="fadeUpSpring">

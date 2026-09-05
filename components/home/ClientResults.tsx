@@ -5,6 +5,7 @@ import Section from '../layout/Section';
 import Counter from '../ui/Counter';
 import Reveal from '../animations/Reveal';
 import Stagger from '../animations/Stagger';
+import MutedAutoplayVideo from '@/components/media/MutedAutoplayVideo';
 
 export default function ClientResults() {
   const results = [
@@ -17,7 +18,8 @@ export default function ClientResults() {
         { value: 245, suffix: '%', label: 'Engagement', subtext: 'Compared to previous month' },
       ],
       imageLeft: false,
-      videoSrc: '/Ds reel 02.mp4',
+      videoSrc: '/ds-reel-02.mp4',
+      poster: '/posters/ds-reel-02.jpg',
     },
     {
       title: 'Growing a clothing brand with',
@@ -28,12 +30,13 @@ export default function ClientResults() {
         { value: 156, suffix: '%', label: 'Engagement', subtext: 'Compared to previous month' },
       ],
       imageLeft: true,
-      videoSrc: '/Bag reel-.mp4',
+      videoSrc: '/bag-reel.mp4',
+      poster: '/posters/bag-reel.jpg',
     },
   ];
 
   return (
-    <Section>
+    <Section className="client-results-section">
       <Container>
         <div className="space-y-24">
           {results.map((result, index) => (
@@ -76,16 +79,13 @@ export default function ClientResults() {
               {/* Image/Video Section */}
               <div className={result.imageLeft ? 'lg:order-1' : 'lg:order-2'}>
                 <Reveal preset={result.imageLeft ? 'slideInLeft' : 'slideInRight'} delay={0.2}>
-                  <div className="media-frame video-frame w-full aspect-[4/4] bg-[#E8E3DC]">
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
+                  <div className="media-frame video-frame w-full aspect-[4/4] bg-bg-surface">
+                    <MutedAutoplayVideo
+                      poster={result.poster}
+                      className="bg-bg-surface"
                     >
                       <source src={result.videoSrc} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
+                    </MutedAutoplayVideo>
                   </div>
                 </Reveal>
               </div>

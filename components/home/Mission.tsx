@@ -6,7 +6,7 @@ import Reveal from '../animations/Reveal';
 
 export default function Mission() {
   return (
-    <Section>
+    <Section className="mission-section">
       <Container>
         <Reveal preset="fadeUpSpring">
           <div className="mission-panel">

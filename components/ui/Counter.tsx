@@ -9,65 +9,79 @@ interface CounterProps {
   className?: string;
 }
 
-export default function Counter({ 
-  value, 
-  suffix = '', 
+export default function Counter({
+  value,
+  suffix = '',
   duration = 2000,
-  className = '' 
+  className = '',
 }: CounterProps) {
-  const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  // Final value in the delivered HTML so a missed intersection never shows "0K".
+  const [count, setCount] = useState(value);
   const elementRef = useRef<HTMLSpanElement>(null);
+  const started = useRef(false);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (hasAnimated) return;
+    const element = elementRef.current;
+    if (!element) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      setCount(value);
+      return;
+    }
+
+    const run = () => {
+      if (started.current) return;
+      started.current = true;
+
+      const startTime = performance.now();
+
+      const tick = (now: number) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        // First frame jumps from SSR final → 0, then counts up.
+        setCount(Math.floor(value * easeOutQuart));
+        if (progress < 1) {
+          rafRef.current = requestAnimationFrame(tick);
+        } else {
+          setCount(value);
+          rafRef.current = null;
+        }
+      };
+
+      // Reset to 0 only inside the animation loop so a cancelled observer
+      // never leaves the DOM stuck on zero.
+      setCount(0);
+      rafRef.current = requestAnimationFrame(tick);
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated) {
-            setHasAnimated(true);
-            
-            const startTime = Date.now();
-            const animate = () => {
-              const elapsed = Date.now() - startTime;
-              const progress = Math.min(elapsed / duration, 1);
-              
-              // Easing function for smooth animation
-              const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-              const currentCount = Math.floor(value * easeOutQuart);
-              
-              setCount(currentCount);
-              
-              if (progress < 1) {
-                requestAnimationFrame(animate);
-              } else {
-                setCount(value);
-              }
-            };
-            
-            animate();
-          }
-        });
+        if (entries.some((entry) => entry.isIntersecting)) {
+          run();
+          observer.disconnect();
+        }
       },
-      { threshold: 0.5 }
+      { threshold: 0.25 }
     );
 
-    if (elementRef.current) {
-      observer.observe(elementRef.current);
-    }
+    observer.observe(element);
 
     return () => {
-      if (elementRef.current) {
-        observer.unobserve(elementRef.current);
-      }
+      observer.disconnect();
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      // If we unmounted mid-animation, leave the last painted value; on remount
+      // SSR/state re-inits to `value`.
     };
-  }, [value, duration, hasAnimated]);
+  }, [value, duration]);
 
+  // Suffix only appears once the count-up has actually reached its final
+  // value — during the animation itself only the bare number is shown.
   return (
     <span ref={elementRef} className={className}>
-      {count}{suffix}
+      {count}
+      {count >= value && suffix}
     </span>
   );
 }
-

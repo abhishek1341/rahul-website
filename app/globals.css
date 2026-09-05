@@ -2,34 +2,267 @@
 @import "tailwindcss";
 
 :root {
-  --background: #EFEBE5;
-  --foreground: #000000;
-  --body-text: rgba(0, 0, 0, 0.48);
+  /* ── Brand primitives (logo) ─────────────────────────────── */
+  --brand-orange: #EE8019; /* FILL ONLY — never use as text */
+  --brand-ember: #DD4711; /* large display type ≥24px only */
+  --brand-ember-deep: #A33208; /* small accent text */
+  --brand-cream: #F1EFD9;
+  --brand-amber: #F5A623;
+  --brand-ink: #0D0A08;
+
+  /* Orange scale — tints toward white, shades toward brand-ink */
+  --brand-orange-50: #FEF5ED;
+  --brand-orange-100: #FBE3CC;
+  --brand-orange-200: #F7C698;
+  --brand-orange-400: #F29C4C;
+  --brand-orange-600: #B66315;
+  --brand-orange-800: #723F10;
+
+  /* Cream scale */
+  --brand-cream-50: #FDFDF9;
+  --brand-cream-100: #FAF9F2;
+  --brand-cream-200: #F7F5E8;
+  --brand-cream-400: #F3F1DF;
+  --brand-cream-600: #B8B6A5;
+  --brand-cream-800: #747166;
+
+  /* ── Semantic tokens ───────────────────────────────────── */
+  /* Dark ember gradient site: cream text for contrast on maroon/black. */
+  --bg-base: transparent;
+  --bg-surface: #EBE8DD; /* media / logo tiles */
+  --bg-elevated: #3A1109; /* cards / panels on the dark field */
+  --text-primary: var(--brand-cream);
+  --text-muted: color-mix(in srgb, var(--brand-cream) 78%, transparent);
+  --text-inverse: #FFFFFF;
+  /* Action orange — white text at 3.00:1 (large/bold). Never revert to #EE8019. */
+  --accent: #e87613;
+  --accent-text: #ffffff;
+  --accent-hover: #d66a0f;
+  --accent-contrast: #ffffff;
+  /* Warm the border with a hint of brand-ink instead of pure black. */
+  --border-subtle: color-mix(in srgb, var(--brand-cream) 8%, transparent);
+  --chip-bg: color-mix(in srgb, var(--brand-cream) 8%, transparent);
+  --chip-bg-active: var(--brand-cream);
+  --chip-text-active: var(--brand-ink);
+
+  /* Legacy aliases (same computed values as before) */
+  --background: var(--bg-base);
+  --foreground: var(--text-primary);
+  --body-text: var(--text-muted);
   --font-serif: 'Source Serif 4', serif;
+  /* 16px padding + 40px min-height + 16px padding on .site-header. Anything
+     sticking below the sticky header offsets against this. */
+  --site-header-height: 72px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-inter), 'Inter', system-ui, sans-serif;
+
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-ember: var(--brand-ember);
+  --color-brand-ember-deep: var(--brand-ember-deep);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-amber: var(--brand-amber);
+  --color-brand-ink: var(--brand-ink);
+
+  --color-brand-orange-50: var(--brand-orange-50);
+  --color-brand-orange-100: var(--brand-orange-100);
+  --color-brand-orange-200: var(--brand-orange-200);
+  --color-brand-orange-400: var(--brand-orange-400);
+  --color-brand-orange-600: var(--brand-orange-600);
+  --color-brand-orange-800: var(--brand-orange-800);
+
+  --color-brand-cream-50: var(--brand-cream-50);
+  --color-brand-cream-100: var(--brand-cream-100);
+  --color-brand-cream-200: var(--brand-cream-200);
+  --color-brand-cream-400: var(--brand-cream-400);
+  --color-brand-cream-600: var(--brand-cream-600);
+  --color-brand-cream-800: var(--brand-cream-800);
+
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-border-subtle: var(--border-subtle);
+  --color-chip-bg: var(--chip-bg);
+  --color-chip-bg-active: var(--chip-bg-active);
+  --color-chip-text-active: var(--chip-text-active);
 }
 
 html {
-  background-color: #EFEBE5;
+  background-color: #2A0C06;
 }
 
 body {
-  background-color: #EFEBE5;
-  color: rgba(0, 0, 0, 0.48);
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  color: var(--text-muted);
   font-family: 'Inter', var(--font-inter), system-ui, sans-serif;
   font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.05em;
   line-height: 1.5;
+  background-color: #2A0C06;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-image: url('/background/site-gradient-v3.webp');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* Mobile-only background swap — desktop keeps the gradient above untouched. */
+@media (max-width: 767px) {
+  body::before {
+    background-image: url('/mobile-bg.jpg');
+    background-image: image-set(url('/mobile-bg.webp') type('image/webp'), url('/mobile-bg.jpg') type('image/jpeg'));
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
 }
 
 main {
-  background-color: #EFEBE5;
+  background-color: transparent;
+}
+
+.site-content {
+  min-height: 100vh;
+  background-color: transparent;
+}
+
+/* Static placeholder covering the page from first paint, before hydration —
+   see the `intro-gate` blocking script + IntroOverlay.tsx. Hidden by default;
+   only shown while the blocking script (or IntroOverlay itself) has flagged
+   `intro-active` on <html>, so repeat visits/non-home routes never see it. */
+#intro-placeholder {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  place-items: center;
+  overflow: hidden;
+  background: #050505;
+}
+
+html.intro-active #intro-placeholder {
+  display: grid;
+}
+
+html.intro-active body {
+  overflow: hidden;
+}
+
+/* Full-screen brand intro */
+.landing-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #050505;
+  opacity: 1;
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.landing-intro--leaving {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.landing-intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 350ms ease;
+}
+
+.landing-intro-video--ready {
+  opacity: 1;
+}
+
+.landing-intro-brand {
+  position: absolute;
+  z-index: 1;
+  color: var(--bg-base);
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 500;
+  letter-spacing: -0.06em;
+  opacity: 0.8;
+  transition: opacity 250ms ease;
+}
+
+.landing-intro-brand--hidden {
+  opacity: 0;
+}
+
+.landing-intro-skip {
+  position: absolute;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 2;
+  padding: 10px 16px;
+  border: 1px solid color-mix(in srgb, var(--text-inverse) 28%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-primary) 30%, transparent);
+  color: var(--text-inverse);
+  font-family: 'Inter', var(--font-inter), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.landing-intro-skip:hover {
+  border-color: color-mix(in srgb, var(--text-inverse) 55%, transparent);
+  background: color-mix(in srgb, var(--text-primary) 55%, transparent);
+  transform: translateY(-1px);
+}
+
+.landing-intro-skip:focus-visible {
+  outline: 2px solid var(--text-inverse);
+  outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .landing-intro-video {
+    object-fit: cover;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-intro,
+  .landing-intro-video,
+  .landing-intro-brand {
+    transition: none;
+  }
 }
 
 @layer base {
@@ -38,14 +271,14 @@ main {
     font-family: 'Inter', var(--font-inter), system-ui, sans-serif;
     font-weight: 500;
     letter-spacing: -0.06em;
-    color: #000000;
+    color: var(--text-primary);
   }
 
   h3 {
     font-family: 'Inter', var(--font-inter), system-ui, sans-serif;
     font-weight: 500;
     letter-spacing: -0.02em;
-    color: #000000;
+    color: var(--text-primary);
   }
 
   h1 {
@@ -69,7 +302,7 @@ main {
     font-weight: 500;
     letter-spacing: -0.05em;
     line-height: 1.5;
-    color: rgba(0, 0, 0, 0.48);
+    color: var(--text-muted);
   }
 
   .accent {
@@ -80,27 +313,22 @@ main {
   }
 
   .text-secondary {
-    color: rgba(0, 0, 0, 0.48);
+    color: var(--text-muted);
   }
 
   .text-near-black {
-    color: #000000;
+    color: var(--text-primary);
   }
 
   .text-body {
-    color: rgba(0, 0, 0, 0.48);
+    color: var(--text-muted);
   }
 }
 
-/* Hero */
+/* Hero — horizontal gutters come from .site-shell (same as header). */
 .hero-section {
-  background-color: #EFEBE5;
-  padding: 48px 24px;
-}
-
-.hero-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  background-color: transparent;
+  padding: 48px 0;
 }
 
 .hero-grid {
@@ -120,7 +348,7 @@ main {
   line-height: 52px;
   font-weight: 500;
   letter-spacing: -0.06em;
-  color: #000000;
+  color: var(--text-primary);
 }
 
 .hero-media {
@@ -134,7 +362,7 @@ main {
   aspect-ratio: 9 / 16;
   margin-left: auto;
   margin-right: auto;
-  background-color: #E8E3DC;
+  background-color: var(--bg-surface);
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -146,7 +374,7 @@ main {
 
 @media (min-width: 1024px) {
   .hero-section {
-    padding: 80px 48px;
+    padding: 80px 0;
   }
 
   .hero-grid {
@@ -169,7 +397,9 @@ main {
 
   .hero-media-inner {
     width: 100%;
-    height: 85vh;
+    /* Cap so the full cream tile stays on-screen at 1440×800 (85vh alone clips). */
+    height: min(85vh, calc(100vh - var(--site-header-height) - 10rem));
+    max-height: calc(100vh - var(--site-header-height) - 10rem);
     max-width: 100%;
     aspect-ratio: auto;
     margin-left: 0;
@@ -182,19 +412,18 @@ main {
     text-align: center;
   }
 
-  .social-marquee-outer {
-    margin: 0 auto;
-  }
-
   .hero-media-inner {
     width: 100%;
-    max-width: 100%;
+    max-width: 340px;
     height: auto;
-    aspect-ratio: auto;
+    aspect-ratio: 9 / 16;
   }
 
   .hero-media-inner video {
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: var(--bg-surface);
   }
 
   .hero-actions {
@@ -213,25 +442,46 @@ main {
   }
 }
 
-/* Navbar */
-.site-header {
-  background-color: #EFEBE5;
-  padding: 16px 24px;
+/* Shared page width — header logo / CTA and body content share this box. */
+.site-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.site-shell {
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 @media (min-width: 1024px) {
-  .site-header {
-    padding: 16px 48px;
+  .site-shell {
+    padding-left: 48px;
+    padding-right: 48px;
   }
 }
 
+/* Navbar — sits on the global gradient; blur only for sticky legibility. */
+.site-header {
+  background-color: transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border: none;
+  border-bottom: none;
+}
+
 .site-header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
+  /* A fixed height rather than a minimum: it keeps the header exactly
+     --site-header-height at every breakpoint, and stops the nav button's own
+     line box (or a fallback font's metrics) from nudging it taller. */
+  height: 40px;
 }
 
 .site-header-nav {
@@ -252,7 +502,7 @@ main {
 .site-header-link {
   font-size: 15px;
   font-weight: 500;
-  color: #000000;
+  color: var(--text-primary);
   transition: opacity 0.15s ease;
 }
 
@@ -261,14 +511,18 @@ main {
 }
 
 .site-header-logo {
-  font-size: 16px;
-  font-weight: 600;
-  color: #000000;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.site-header-logo:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 4px;
+  border-radius: 6px;
 }
 
 .mobile-menu-panel {
-  max-width: 1200px;
-  margin: 0 auto;
   padding: 16px 0 8px;
   display: flex;
   flex-direction: column;
@@ -280,7 +534,7 @@ main {
   padding: 12px 0;
   font-size: 15px;
   font-weight: 500;
-  color: #000000;
+  color: var(--text-primary);
 }
 
 .mobile-menu-cta {
@@ -294,43 +548,54 @@ main {
   text-align: center;
 }
 
-/* Buttons */
+/* Buttons — primary CTAs stay accent orange + white */
 .btn-primary {
   display: inline-block;
-  background: #000000;
-  color: #ffffff;
+  background: var(--accent);
+  color: var(--accent-text);
   border-radius: 999px;
   padding: 14px 28px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   border: none;
   box-shadow: none;
   text-decoration: none;
-  transition: opacity 0.15s ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease;
   cursor: pointer;
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  background: var(--accent-hover);
+  color: var(--accent-text);
+  opacity: 1;
 }
 
+/* Header "Book a call" (desktop + mobile drawer) — accent + white. */
 .btn-nav {
   display: inline-block;
-  background: #000000;
-  color: #ffffff;
+  background: var(--accent);
+  color: var(--accent-text);
   border-radius: 999px;
   padding: 10px 20px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   border: none;
   box-shadow: none;
   text-decoration: none;
-  transition: opacity 0.15s ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease;
   cursor: pointer;
 }
 
 .btn-nav:hover {
-  opacity: 0.9;
+  background: var(--accent-hover);
+  color: var(--accent-text);
+  opacity: 1;
 }
 
 /* Section labels */
@@ -343,12 +608,12 @@ main {
 .section-label {
   display: inline-flex;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--chip-bg);
   border-radius: 11px;
   padding: 8px 16px;
   font-size: 18px;
   font-weight: 500;
-  color: #000000;
+  color: var(--text-primary);
   letter-spacing: -0.01em;
   border: none;
   outline: none;
@@ -412,7 +677,7 @@ main {
   }
 
   .site-section .comparison-column .comparison-card-brand {
-    color: #000000;
+    color: var(--text-primary);
   }
 
   .site-section .mission-panel,
@@ -433,24 +698,18 @@ main {
 }
 
 .mission-panel {
-  background-color: rgb(247, 242, 234);
+  background-color: var(--bg-elevated);
   border-radius: 16px;
   padding: 48px 24px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--text-primary) 6%, transparent);
   margin: 0 auto;
   width: 100%;
-  max-width: 520px;
+  max-width: none;
   text-align: left;
 }
 
 .mission-panel .section-label-row {
   justify-content: flex-start;
-}
-
-.mission-panel .section-label {
-  font-size: 13px;
-  padding: 6px 12px;
-  border-radius: 8px;
 }
 
 .mission-panel-heading {
@@ -459,7 +718,7 @@ main {
   line-height: 1.15;
   font-weight: 500;
   letter-spacing: -0.06em;
-  color: #000000;
+  color: var(--text-primary);
 }
 
 .mission-panel-body {
@@ -470,11 +729,11 @@ main {
 
 .mission-panel h1,
 .mission-panel-heading {
-  color: #000000;
+  color: var(--text-primary);
 }
 
 .mission-panel p {
-  color: rgba(0, 0, 0, 0.48);
+  color: var(--text-muted);
   font-size: 18px;
   font-weight: 500;
   letter-spacing: -0.05em;
@@ -489,7 +748,7 @@ main {
 .mission-panel-footer-name {
   font-size: 18px;
   font-weight: 600;
-  color: #000000;
+  color: var(--text-primary);
   letter-spacing: -0.03em;
 }
 
@@ -508,7 +767,7 @@ main {
   font-size: 26px;
   font-weight: 500;
   margin-bottom: 4px;
-  color: #000000;
+  color: var(--text-primary);
 }
 
 /* How we work steps */
@@ -517,9 +776,9 @@ main {
   flex-direction: column;
   align-items: center;
   background: transparent;
-  padding: 32px 24px;
+  padding: 32px 24px 0;
   text-align: center;
-  height: 100%;
+  height: auto;
 }
 
 .how-we-work-step-icon {
@@ -530,8 +789,8 @@ main {
   height: 56px;
   margin-bottom: 20px;
   border-radius: 16px;
-  background-color: rgba(0, 0, 0, 0.06);
-  color: #000000;
+  background-color: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  color: var(--text-primary);
   flex-shrink: 0;
 }
 
@@ -539,19 +798,31 @@ main {
   margin-bottom: 8px;
   font-size: 20px;
   font-weight: 600;
-  color: #000000;
+  color: var(--text-primary);
   letter-spacing: -0.03em;
 }
 
 .how-we-work-step-description {
   font-size: 16px;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.48);
+  color: var(--text-muted);
   line-height: 1.5;
 }
 
 .how-we-work-steps-wrap {
   position: relative;
+  min-height: 0;
+}
+
+/* Trim the usual section bottom padding — cards no longer stretch to fill a tall row. */
+.how-we-work-section.site-section {
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .how-we-work-section.site-section {
+    padding-bottom: 4.5rem;
+  }
 }
 
 .how-we-work-flow {
@@ -594,16 +865,19 @@ main {
 @keyframes how-we-work-node-pulse {
   0%,
   100% {
-    stroke: rgba(0, 0, 0, 0.12);
+    fill: #e87613;
+    stroke: #e87613;
   }
 
   8%,
   12% {
-    stroke: rgba(0, 0, 0, 0.45);
+    fill: #f5a623;
+    stroke: #f5a623;
   }
 
   10% {
-    stroke: rgba(0, 0, 0, 0.55);
+    fill: #f5a623;
+    stroke: #f5a623;
   }
 }
 
@@ -652,11 +926,11 @@ main {
 }
 
 .comparison-card--other {
-  background: rgb(247, 242, 234);
+  background: var(--bg-elevated);
 }
 
 .comparison-card--suntrix {
-  background: rgb(247, 242, 234);
+  background: var(--bg-elevated);
 }
 
 .comparison-card-header {
@@ -664,7 +938,7 @@ main {
   font-size: 22.5px;
   font-weight: 500;
   text-align: center;
-  color: rgba(0, 0, 0, 0.35);
+  color: color-mix(in srgb, var(--text-primary) 35%, transparent);
 }
 
 .comparison-card-brand {
@@ -672,7 +946,7 @@ main {
   font-size: 22.5px;
   font-weight: 500;
   text-align: center;
-  color: rgb(0, 0, 0);
+  color: var(--text-primary);
 }
 
 .comparison-list {
@@ -699,11 +973,11 @@ main {
 }
 
 .comparison-card--other .comparison-list-item {
-  color: rgba(0, 0, 0, 0.4);
+  color: color-mix(in srgb, var(--text-primary) 40%, transparent);
 }
 
 .comparison-card--suntrix .comparison-list-item {
-  color: rgb(0, 0, 0);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -715,8 +989,8 @@ main {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.08);
-  color: rgba(0, 0, 0, 0.3);
+  background: var(--border-subtle);
+  color: color-mix(in srgb, var(--text-primary) 30%, transparent);
   font-size: 14px;
   line-height: 1;
 }
@@ -729,33 +1003,51 @@ main {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #000000;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  background: var(--brand-orange);
+  color: var(--text-inverse);
   font-size: 14px;
   line-height: 1;
 }
 
-/* Get started CTA */
-.get-started-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
+/* Warm panel background (mission, team CTA) */
+.warm-panel {
+  background-color: var(--bg-elevated);
 }
 
-/* Warm panel background (mission, get started, team CTA) */
-.warm-panel {
-  background-color: rgb(247, 242, 234);
+/* Full-bleed CTA + footer stack — transparent; global gradient shows through. */
+.brand-band-stack {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  background-color: transparent;
+  background-image: none;
+}
+
+.brand-band-stack::before,
+.brand-band-stack::after {
+  content: none;
+  display: none;
+}
+
+.brand-band-cta {
+  position: relative;
+  z-index: 2;
+  padding: 64px 0 48px;
+  background-color: transparent;
+}
+
+.brand-band-footer {
+  position: relative;
+  z-index: 2;
+  padding: 48px 0 64px;
+  background-color: transparent;
 }
 
 .get-started-cta {
   width: 100%;
   max-width: 700px;
-  margin: 48px auto 0;
-  padding: 48px 24px;
-  border-radius: 24px;
-  background: rgb(247, 242, 234);
+  margin: 0 auto;
+  padding: 8px 24px 0;
   text-align: center;
 }
 
@@ -764,33 +1056,29 @@ main {
   font-size: 40px;
   font-weight: 500;
   letter-spacing: -0.05em;
-  color: #000000;
+  color: var(--text-primary);
   line-height: 1.1;
+}
+
+.get-started-cta-heading .accent {
+  color: var(--text-primary);
 }
 
 .get-started-cta-description {
   max-width: 420px;
   margin: 0 auto 32px;
   font-size: 17px;
-  color: rgba(0, 0, 0, 0.48);
+  color: var(--text-muted);
   line-height: 1.5;
 }
 
-.get-started-cta-button {
-  display: inline-block;
-  background: #000000;
-  color: #ffffff;
-  border-radius: 999px;
-  padding: 16px 32px;
-  font-size: 16px;
-  font-weight: 500;
-  text-decoration: none;
-  border: none;
-  transition: opacity 0.15s ease;
+.brand-band-footer h3,
+.brand-band-footer h4 {
+  color: var(--text-primary);
 }
 
-.get-started-cta-button:hover {
-  opacity: 0.9;
+.brand-band-footer p {
+  color: var(--text-muted);
 }
 
 .get-started-media {
@@ -812,8 +1100,16 @@ main {
 }
 
 @media (min-width: 768px) {
+  .brand-band-cta {
+    padding: 88px 0 56px;
+  }
+
+  .brand-band-footer {
+    padding: 56px 0 80px;
+  }
+
   .get-started-cta {
-    padding: 80px 40px;
+    padding: 8px 40px 0;
   }
 
   .get-started-cta-heading {
@@ -823,47 +1119,47 @@ main {
 
 /* Services cards */
 .service-card {
-  background-color: rgb(247, 242, 234);
+  background-color: var(--bg-elevated);
 }
 
 .bg-section-primary {
-  background-color: #EFEBE5;
+  background-color: transparent;
 }
 
 .bg-section-secondary {
-  background-color: #EFEBE5;
+  background-color: transparent;
 }
 
 .border-subtle {
-  border-color: rgba(0, 0, 0, 0.08);
+  border-color: var(--border-subtle);
 }
 
 .border-divider {
-  border-color: rgba(0, 0, 0, 0.1);
+  border-color: color-mix(in srgb, var(--text-primary) 10%, transparent);
 }
 
 .bg-card-soft {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--text-inverse);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
 }
 
 .bg-card-warm {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: var(--text-inverse);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
 }
 
 .footer-link {
-  color: rgba(0, 0, 0, 0.48);
+  color: var(--text-muted);
   transition: color 0.15s ease;
 }
 
 .footer-link:hover {
-  color: rgba(0, 0, 0, 0.72);
+  color: var(--text-primary);
 }
 
-/* Sitewide media frame (photos & videos) */
+/* Sitewide media frame (photos & videos) — border locked to original cream */
 .media-frame,
 .video-frame {
   border: 6px solid rgba(247, 242, 234, 0.85);
@@ -891,4 +1187,517 @@ video {
   border: none;
   border-radius: 0;
   box-shadow: none;
+}
+
+/* Client logo marquee ───────────────────────────────────────────
+   Full-bleed strip; the edge fade below stands in for page gutters. */
+.logo-marquee {
+  --logo-marquee-duration: 36s;
+  --logo-marquee-tile-w: 116px;
+  --logo-marquee-tile-h: 62px;
+  --logo-marquee-gap: 12px;
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Fades logos out at both edges rather than hard-clipping them. */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+.logo-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  will-change: transform;
+  animation: logo-marquee-scroll var(--logo-marquee-duration) linear infinite;
+}
+
+.logo-marquee-set {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Spacing lives on the tiles, not as flex `gap`: `gap` omits a trailing space
+   after the final tile, which would leave the -50% keyframe half a gap short
+   of a seamless wrap. A right margin makes every tile the same stride. */
+.logo-marquee-tile {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--logo-marquee-tile-w);
+  height: var(--logo-marquee-tile-h);
+  margin-right: var(--logo-marquee-gap);
+  /* Artwork arrives pre-trimmed to its bounding box, so the breathing room
+     around each mark has to come from here. */
+  padding: 10px 16px;
+  border-radius: 12px;
+  /* Cream tile: several logos ship dark artwork or a baked-in white box, so
+     a shared light plate is the only way the row reads evenly on the ember
+     gradient. Matches the --bg-surface media/logo tiles used elsewhere. */
+  background: var(--bg-surface);
+}
+
+.logo-marquee-thumb {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.logo-marquee-img {
+  object-fit: contain;
+}
+
+@keyframes logo-marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .logo-marquee {
+    --logo-marquee-tile-w: 150px;
+    --logo-marquee-tile-h: 80px;
+    --logo-marquee-gap: 18px;
+  }
+
+  .logo-marquee-tile {
+    padding: 13px 22px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logo-marquee:hover .logo-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee {
+    overflow-x: auto;
+  }
+
+  .logo-marquee-track {
+    animation: none;
+    will-change: auto;
+  }
+
+  /* A frozen track would still show the duplicate set; drop it so the static
+     row is just the logos once, swipeable for whatever overflows. */
+  .logo-marquee-set[data-clone] {
+    display: none;
+  }
+}
+
+/* Portfolio */
+
+/* Opt out of the sitewide framed-video treatment above. */
+.portfolio-tile video,
+.portfolio-stage video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Never crop the work itself in the lightbox. */
+.portfolio-stage video {
+  object-fit: contain;
+  background: var(--text-primary);
+}
+
+/* Backdrop fill behind letterboxed (contain-fit) grid tiles — square/landscape
+   source clips that would otherwise lose too much width/height to a 9:16
+   cover crop. Scaled up so the heavy blur never reveals a sharp edge against
+   the frame's rounded corners. */
+.portfolio-tile-backdrop {
+  filter: blur(28px) brightness(0.7) saturate(1.1);
+  transform: scale(1.2);
+}
+
+.portfolio-scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+
+.portfolio-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.portfolio-scrubber::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+.portfolio-scrubber:focus-visible {
+  outline: 2px solid var(--text-inverse);
+  outline-offset: 3px;
+}
+
+@keyframes portfolio-lightbox-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes portfolio-stage-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portfolio-lightbox-enter {
+  animation: portfolio-lightbox-in 160ms ease-out;
+}
+
+.portfolio-stage-enter {
+  animation: portfolio-stage-in 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-lightbox-enter,
+  .portfolio-stage-enter {
+    animation: none;
+  }
+}
+
+.portfolio-tile {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 310px;
+}
+
+/* Rough off-screen height estimates so skipped tiles do not misreport scroll
+   height; the tile width, and so its 9:16 height, grows with each breakpoint. */
+@media (min-width: 640px) {
+  .portfolio-tile {
+    contain-intrinsic-size: auto 460px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .portfolio-tile {
+    contain-intrinsic-size: auto 580px;
+  }
+
+  /* Editorial stagger: drop every second column. Uses `translate` rather than
+     `transform` so it composes with the hover lift below instead of replacing
+     it, and it sits on the tiles while the re-flow animation runs on their
+     container, so neither one can clobber the other. */
+  .portfolio-grid > :nth-child(even) {
+    translate: 0 40px;
+  }
+
+  /* `.section-label-row` centres unconditionally and is unlayered, so it would
+     beat a Tailwind `lg:justify-start` utility no matter the source order.
+     Scoped to the split (featured-video) layout only — the default,
+     no-featured-item hero stays centered at every breakpoint. */
+  .portfolio-hero--split .section-label-row {
+    justify-content: flex-start;
+  }
+}
+
+.portfolio-tile {
+  transition: transform 200ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-tile:hover {
+    transform: scale(1.02);
+  }
+}
+
+.portfolio-tile:active {
+  transform: scale(1.02);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-tile {
+    transition: none;
+  }
+
+  .portfolio-tile:hover,
+  .portfolio-tile:active {
+    transform: none;
+  }
+}
+
+.portfolio-duration {
+  background: color-mix(in srgb, var(--brand-ink) 70%, transparent);
+}
+
+.portfolio-scroller {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.portfolio-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Filter chips — idle cream on gradient; active accent + white */
+.portfolio-chip--idle {
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--brand-cream) 24%, transparent);
+  color: color-mix(in srgb, var(--brand-cream) 80%, transparent);
+}
+
+.portfolio-chip--active {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: var(--accent-text);
+}
+
+.portfolio-chip-dot {
+  background: var(--accent-text);
+}
+
+.portfolio-filter-fade {
+  width: 32px;
+  background: #2A0C06;
+}
+
+.portfolio-page[data-bg-variant='current'] .portfolio-filter-fade {
+  background: #2A0C06;
+}
+
+/* Mobile: room under the edge so the last chip isn't hard-clipped. */
+.portfolio-filter-row {
+  overflow: visible;
+}
+
+@media (max-width: 1023px) {
+  .portfolio-scroller {
+    padding-right: 32px;
+  }
+
+  .portfolio-filter-fade {
+    display: none;
+  }
+}
+
+/* Passthrough wrapper — site background is global in layout.tsx */
+.page-theme {
+  position: relative;
+  min-height: 100%;
+  background-color: transparent;
+}
+
+/* ── Brand accent: Portfolio page + Home hero only ───────── */
+
+.portfolio-page {
+  --accent: #e87613;
+  --accent-text: #ffffff;
+  --accent-hover: #d66a0f;
+  position: relative;
+}
+
+/* Portfolio cards reuse .media-frame / .video-frame; CARD_FRAME toggles border. */
+.portfolio-page .portfolio-tile {
+  box-sizing: border-box;
+}
+
+.portfolio-page[data-card-frame='white'] .portfolio-tile,
+.portfolio-page[data-card-frame='white'] .portfolio-hero .media-frame {
+  border: 6px solid rgba(247, 242, 234, 0.85);
+}
+
+.portfolio-page[data-card-frame='cream'] .portfolio-tile,
+.portfolio-page[data-card-frame='cream'] .portfolio-hero .media-frame {
+  border: 6px solid rgba(247, 242, 234, 0.85);
+}
+
+.portfolio-page .portfolio-tile,
+#our-team {
+  scroll-margin-top: calc(var(--site-header-height) + 12px);
+}
+
+/* Stats: leading-none + tight tracking clipped glyph tops on mobile.
+   Also clear the editorial stagger that can paint into this strip. */
+.portfolio-page .portfolio-grid {
+  overflow: visible;
+  padding-bottom: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .portfolio-page .portfolio-grid {
+    /* Matches the 40px even-column translate so stats aren't overlapped. */
+    padding-bottom: 2.5rem;
+    /* Centre short rows when a filter has fewer items than the column count. */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .portfolio-page .portfolio-grid > * {
+    flex: 0 0 calc((100% - 3rem) / 4);
+    max-width: calc((100% - 3rem) / 4);
+  }
+}
+
+.portfolio-page .portfolio-stats {
+  overflow: visible;
+  /* Breathing room above the number line box (was cramped under the grid). */
+  padding-top: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .portfolio-page .portfolio-stats {
+    padding-top: 4.5rem;
+  }
+}
+
+.portfolio-page .portfolio-stats .warm-panel {
+  overflow: visible;
+}
+
+.portfolio-page .portfolio-stat-value {
+  overflow: visible;
+  padding-block: 0.2rem;
+}
+
+/* ── Portfolio BG variants (`data-bg-variant`) ───────────────
+   Switch in app/portfolio/page.tsx:
+     const BG_VARIANT: 'full' | 'anchored' | 'current' = 'anchored';
+   Background is global; variants only affect chrome tokens. */
+
+.portfolio-page[data-bg-variant='full'],
+.portfolio-page[data-bg-variant='anchored'] {
+  background-color: transparent;
+  color: var(--text-muted);
+}
+
+.portfolio-page[data-bg-variant='full'] main,
+.portfolio-page[data-bg-variant='anchored'] main {
+  background-color: transparent;
+}
+
+/* Legacy washes disabled — global gradient replaces them. */
+.portfolio-page[data-bg-variant='full']::before,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-top-wash {
+  display: none;
+}
+
+.portfolio-page[data-bg-variant='anchored'] > .site-header,
+.portfolio-page[data-bg-variant='full'] > .site-header {
+  z-index: 50;
+}
+
+.portfolio-page[data-bg-variant='full'] .portfolio-hero h1,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-hero h1,
+.portfolio-page[data-bg-variant='full'] .portfolio-hero h1 .accent,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-hero h1 .accent {
+  color: var(--text-primary);
+}
+
+.portfolio-page[data-bg-variant='full'] .portfolio-hero p,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-hero p {
+  color: var(--text-muted);
+}
+
+.portfolio-page[data-bg-variant='full'] .portfolio-filter-bar,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-filter-bar {
+  background-color: transparent;
+  border-bottom: none;
+}
+
+.portfolio-page[data-bg-variant='full'] .portfolio-stats .warm-panel,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-stats .warm-panel {
+  background-color: var(--bg-elevated);
+}
+
+.portfolio-page[data-bg-variant='full'] .portfolio-stat-value,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-stat-value {
+  color: var(--brand-ember);
+}
+
+.portfolio-page[data-bg-variant='full'] .portfolio-stat-label,
+.portfolio-page[data-bg-variant='anchored'] .portfolio-stat-label {
+  color: var(--text-muted);
+}
+
+.portfolio-page .btn-primary,
+.hero-section .btn-primary {
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease;
+}
+
+.portfolio-page .btn-primary:hover,
+.hero-section .btn-primary:hover {
+  background: var(--accent-hover);
+  color: var(--accent-text);
+  opacity: 1;
+}
+
+@keyframes portfolio-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.portfolio-tile-enter {
+  animation: portfolio-tile-in 150ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-tile-enter {
+    animation: none;
+  }
 }

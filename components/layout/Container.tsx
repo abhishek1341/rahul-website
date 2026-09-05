@@ -3,10 +3,14 @@ interface ContainerProps {
   className?: string;
 }
 
+/**
+ * Shared page gutters — same max-width + horizontal padding model as the
+ * site header (logo / Book a call edges).
+ */
 export default function Container({ children, className = '' }: ContainerProps) {
   return (
-    <div className={`mx-auto w-full max-w-[1200px] px-6 lg:px-12 ${className}`}>
-      {children}
+    <div className={`site-shell ${className}`.trim()}>
+      <div className="site-container">{children}</div>
     </div>
   );
 }

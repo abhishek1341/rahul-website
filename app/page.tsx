@@ -9,13 +9,24 @@ import OurTeam from '@/components/home/OurTeam';
 import GetStarted from '@/components/home/GetStarted';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import BrandBandStack from '@/components/layout/BrandBandStack';
+import PageTheme from '@/components/layout/PageTheme';
+import LogoMarquee from '@/components/ui/LogoMarquee';
+import { loadClientLogos } from '@/lib/client-logos';
 
 export default function Home() {
+  const clientLogos = loadClientLogos();
+
   return (
-    <>
+    <PageTheme theme="dark">
       <Header />
       <main>
         <Hero />
+        <LogoMarquee
+          logos={clientLogos}
+          speedSeconds={40}
+          className="py-10 md:py-14"
+        />
         <Services />
         <Mission />
         <ClientResults />
@@ -23,9 +34,11 @@ export default function Home() {
         {/* <Testimonial /> */}
         <TheDifference />
         <OurTeam />
-        <GetStarted />
       </main>
-      <Footer />
-    </>
+      <BrandBandStack>
+        <GetStarted />
+        <Footer />
+      </BrandBandStack>
+    </PageTheme>
   );
 }

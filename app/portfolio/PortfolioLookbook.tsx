@@ -44,7 +44,7 @@ function getInitials(name: string) {
 
 function Checkmark() {
   return (
-    <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#7C5CFF] text-[11px] font-semibold leading-none text-white">
+    <span className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#7C5CFF] text-[11px] font-semibold leading-none text-text-inverse">
       ✓
     </span>
   );
@@ -82,10 +82,10 @@ function EmptyViewerState() {
   return (
     <div className="mt-4 flex min-h-[280px] items-center justify-center rounded-[16px] border-[1.5px] border-dashed border-[#C8C3BB] p-12 text-center">
       <div>
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F3EFE8] text-[20px] text-[#000000]">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#F3EFE8] text-[20px] text-text-primary">
           ▶
         </div>
-        <p className="mx-auto mt-4 max-w-[260px] text-[14px] leading-[1.5] text-[rgba(0,0,0,0.48)]">
+        <p className="mx-auto mt-4 max-w-[260px] text-[14px] leading-[1.5] text-text-muted">
           Select a client and service above to view portfolio videos
         </p>
       </div>
@@ -177,7 +177,7 @@ export default function PortfolioLookbook({
     if (failedLogos[client.id]) {
       return (
         <div
-          className={`${dimensions} ${textSize} flex shrink-0 items-center justify-center rounded-full bg-[#EFEBE5] font-semibold text-[#000000]`}
+          className={`${dimensions} ${textSize} flex shrink-0 items-center justify-center rounded-full bg-bg-base font-semibold text-text-primary`}
         >
           {getInitials(client.name)}
         </div>
@@ -209,8 +209,8 @@ export default function PortfolioLookbook({
         <div
           className={`${wrapperClassName} flex items-center justify-center overflow-hidden text-center ${
             placeholder === "initials"
-              ? "bg-[#D4CFC8] text-[12px] font-bold text-[rgba(0,0,0,0.48)]"
-              : "bg-[#D8D3CB] p-4 text-[13px] font-medium text-[rgba(0,0,0,0.48)]"
+              ? "bg-[#D4CFC8] text-[12px] font-bold text-text-muted"
+              : "bg-[#D8D3CB] p-4 text-[13px] font-medium text-text-muted"
           }`}
         >
           {placeholder === "initials" ? getInitials(video.title) : video.title}
@@ -232,7 +232,7 @@ export default function PortfolioLookbook({
 
   return (
     <main
-      className="bg-[#EFEBE5]"
+      className="bg-bg-base"
       style={{
         minHeight: "100vh",
         display: "flex",
@@ -253,7 +253,7 @@ export default function PortfolioLookbook({
           display: "inline-flex",
           alignItems: "center",
           gap: "6px",
-          border: "1px solid rgba(0,0,0,0.2)",
+          border: "1px solid color-mix(in srgb, var(--text-primary) 20%, transparent)",
           borderRadius: "999px",
           padding: "6px 14px",
           fontSize: "11px",
@@ -261,21 +261,21 @@ export default function PortfolioLookbook({
           letterSpacing: "0.06em",
           width: "fit-content",
           alignSelf: "flex-start",
-          color: "#000000",
+          color: "var(--text-primary)",
         }}
       >
         ✳ SUNTRIX MEDIA
       </div>
 
       <h1
-        className="font-medium leading-none text-[#000000]"
+        className="font-medium leading-none text-text-primary"
         style={{ marginTop: "8px", fontSize: "clamp(36px, 4.25vw, 56px)", letterSpacing: "-0.06em" }}
       >
         Portfolio
       </h1>
 
       <p
-        className="max-w-[480px] text-[rgba(0,0,0,0.48)]"
+        className="max-w-[480px] text-text-muted"
         style={{ marginTop: "6px", marginBottom: "28px", fontSize: "18px", lineHeight: "27px", letterSpacing: "-0.9px", whiteSpace: "nowrap" }}
       >
         Select a client, choose a service or niche, then browse portfolio videos in a story-style sequence.
@@ -299,7 +299,7 @@ export default function PortfolioLookbook({
                 height: '28px',
                 borderRadius: '50%',
                 background: '#7C5CFF',
-                color: '#ffffff',
+                color: "var(--text-inverse)",
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -307,10 +307,10 @@ export default function PortfolioLookbook({
                 fontWeight: '600',
                 flexShrink: 0
               }}>1</div>
-              <span className="shrink-0 text-[18px] font-semibold text-[#000000]">
+              <span className="shrink-0 text-[18px] font-semibold text-text-primary">
                 Select Client
               </span>
-              <span className="h-px flex-1 bg-[rgba(0,0,0,0.1)]" />
+              <span className="h-px flex-1 bg-text-primary/10" />
             </div>
 
             <div
@@ -329,10 +329,10 @@ export default function PortfolioLookbook({
                     key={client.id}
                     type="button"
                     onClick={() => handleClientSelect(client.id)}
-                    className={`relative cursor-pointer bg-white text-center transition duration-150 hover:scale-[1.02] ${
+                    className={`relative cursor-pointer bg-text-inverse text-center transition duration-150 hover:scale-[1.02] ${
                       isSelected
                         ? "border-2 border-[#7C5CFF]"
-                        : "border border-[#E8E3DC]"
+                        : "border border-bg-surface"
                     }`}
                     style={{
                       minHeight: "230px",
@@ -352,10 +352,10 @@ export default function PortfolioLookbook({
                     <div className="mx-auto flex justify-center">
                       {renderLogo(client, 82)}
                     </div>
-                    <div className="text-[15px] font-semibold leading-tight text-[#000000]" style={{ marginTop: "12px", textAlign: "center" }}>
+                    <div className="text-[15px] font-semibold leading-tight text-text-primary" style={{ marginTop: "12px", textAlign: "center" }}>
                       {client.name}
                     </div>
-                    <div className="text-[13px] leading-snug text-[rgba(0,0,0,0.48)]" style={{ marginTop: "4px", textAlign: "center" }}>
+                    <div className="text-[13px] leading-snug text-text-muted" style={{ marginTop: "4px", textAlign: "center" }}>
                       {client.desc}
                     </div>
                     <div
@@ -378,7 +378,7 @@ export default function PortfolioLookbook({
                             padding: "2px 7px",
                             borderRadius: "999px",
                             background: "#F0EBE4",
-                            color: "rgba(0, 0, 0, 0.48)",
+                            color: "var(--text-muted)",
                             whiteSpace: "nowrap",
                             flexShrink: 0,
                           }}
@@ -401,25 +401,25 @@ export default function PortfolioLookbook({
                     key={client.id}
                     type="button"
                     onClick={() => handleClientSelect(client.id)}
-                    className={`flex w-full cursor-pointer items-center gap-3 rounded-[12px] bg-white px-4 py-[14px] text-left transition duration-150 ${
+                    className={`flex w-full cursor-pointer items-center gap-3 rounded-[12px] bg-text-inverse px-4 py-[14px] text-left transition duration-150 ${
                       isSelected
                         ? "border-2 border-[#7C5CFF]"
-                        : "border border-[#E8E3DC]"
+                        : "border border-bg-surface"
                     }`}
                   >
                     {renderLogo(client, 48)}
                     <span className="min-w-0 flex-1">
-                      <span className="block text-[15px] font-semibold leading-tight text-[#000000]">
+                      <span className="block text-[15px] font-semibold leading-tight text-text-primary">
                         {client.name}
                       </span>
-                      <span className="mt-1 block text-[13px] leading-snug text-[rgba(0,0,0,0.48)]">
+                      <span className="mt-1 block text-[13px] leading-snug text-text-muted">
                         {client.desc}
                       </span>
                       <span className="mt-2 flex flex-wrap gap-2">
                         {client.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-full bg-[#F3EFE8] px-[10px] py-[3px] text-[11px] leading-none text-[rgba(0,0,0,0.48)]"
+                            className="rounded-full bg-[#F3EFE8] px-[10px] py-[3px] text-[11px] leading-none text-text-muted"
                           >
                             {tag}
                           </span>
@@ -441,7 +441,7 @@ export default function PortfolioLookbook({
 
           <section
             ref={stepTwoRef}
-            className="border-t border-[rgba(0,0,0,0.1)] md:border-t-0"
+            className="border-t border-text-primary/10 md:border-t-0"
             style={{ marginTop: "16px" }}
           >
             <div className="flex items-center gap-3">
@@ -450,7 +450,7 @@ export default function PortfolioLookbook({
                 height: '28px',
                 borderRadius: '50%',
                 background: '#7C5CFF',
-                color: '#ffffff',
+                color: "var(--text-inverse)",
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -458,10 +458,10 @@ export default function PortfolioLookbook({
                 fontWeight: '600',
                 flexShrink: 0
               }}>2</div>
-              <span className="shrink-0 text-[18px] font-semibold text-[#000000]">
+              <span className="shrink-0 text-[18px] font-semibold text-text-primary">
                 Choose Niche / Service
               </span>
-              <span className="h-px flex-1 bg-[rgba(0,0,0,0.1)]" />
+              <span className="h-px flex-1 bg-text-primary/10" />
             </div>
 
             <div className="flex flex-wrap" style={{ gap: "12px", marginTop: "12px" }}>
@@ -482,10 +482,10 @@ export default function PortfolioLookbook({
                     <span
                       className={`flex items-center justify-center rounded-full border-[1.5px] transition-colors ${
                         isSelected
-                          ? "border-[#7C5CFF] bg-[#7C5CFF] text-white"
+                          ? "border-[#7C5CFF] bg-[#7C5CFF] text-text-inverse"
                           : isDisabled
-                            ? "border-[#D8D3CB] bg-white text-[#999]"
-                            : "border-[#D8D3CB] bg-white text-[#000000] group-hover:bg-[#F3EFE8]"
+                            ? "border-[#D8D3CB] bg-text-inverse text-[#999]"
+                            : "border-[#D8D3CB] bg-text-inverse text-text-primary group-hover:bg-[#F3EFE8]"
                       }`}
                       style={{ width: "60px", height: "60px", fontSize: "18px" }}
                     >
@@ -495,7 +495,7 @@ export default function PortfolioLookbook({
                       style={{
                         marginTop: "6px",
                         fontSize: "12px",
-                        color: isSelected ? "#000000" : "rgba(0, 0, 0, 0.48)",
+                        color: isSelected ? "var(--text-primary)" : "var(--text-muted)",
                         fontWeight: isSelected ? 600 : 400,
                       }}
                     >
@@ -510,7 +510,7 @@ export default function PortfolioLookbook({
 
         <section
           ref={stepThreeRef}
-          className="w-full border-t border-[rgba(0,0,0,0.1)] xl:w-auto xl:border-t-0"
+          className="w-full border-t border-text-primary/10 xl:w-auto xl:border-t-0"
           style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", paddingTop: "0" }}
         >
           <div
@@ -526,7 +526,7 @@ export default function PortfolioLookbook({
               height: '28px',
               borderRadius: '50%',
               background: '#7C5CFF',
-              color: '#ffffff',
+              color: "var(--text-inverse)",
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -537,7 +537,7 @@ export default function PortfolioLookbook({
             <span style={{ fontSize: "16px", fontWeight: "600", color: "#111111" }}>
               View Portfolio Videos
             </span>
-            <span style={{ fontSize: "14px", color: "rgba(0, 0, 0, 0.48)", marginLeft: "4px" }}>↓</span>
+            <span style={{ fontSize: "14px", color: "var(--text-muted)", marginLeft: "4px" }}>↓</span>
           </div>
 
           {!selectedClientData || !viewerNicheData || !currentVideo ? (
@@ -549,18 +549,18 @@ export default function PortfolioLookbook({
                   <button
                     type="button"
                     onClick={() => goToVideo(-1)}
-                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#D8D3CB] bg-white text-[18px] text-[#000000]"
+                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#D8D3CB] bg-text-inverse text-[18px] text-text-primary"
                     aria-label="Previous video"
                   >
                     ‹
                   </button>
-                  <div className="text-center text-[11px] leading-tight text-[rgba(0,0,0,0.48)]">
+                  <div className="text-center text-[11px] leading-tight text-text-muted">
                     Previous<br />Video
                   </div>
                 </div>
 
                 <div
-                  className="relative mx-auto overflow-hidden rounded-[40px] border-[8px] border-[#111111] bg-black"
+                  className="relative mx-auto overflow-hidden rounded-[40px] border-[8px] border-[#111111] bg-text-primary"
                   style={{ width: "305px", height: "calc(100vh - 265px)", maxHeight: "520px", minHeight: "400px" }}
                 >
                   <div
@@ -576,7 +576,7 @@ export default function PortfolioLookbook({
                       zIndex: 10,
                     }}
                   />
-                  <div className="flex h-full flex-col overflow-hidden rounded-[36px] bg-white" style={{ height: "100%" }}>
+                  <div className="flex h-full flex-col overflow-hidden rounded-[36px] bg-text-inverse" style={{ height: "100%" }}>
                     <ProgressTabs
                       count={activeVideos.length}
                       activeIndex={activeVideoIndex}
@@ -588,10 +588,10 @@ export default function PortfolioLookbook({
                     >
                       {renderLogo(selectedClientData, 26)}
                       <div className="min-w-0">
-                        <div className="truncate text-[13px] font-semibold leading-[1.2] text-[#000000]">
+                        <div className="truncate text-[13px] font-semibold leading-[1.2] text-text-primary">
                           {selectedClientData.name}
                         </div>
-                        <div className="text-[11px] font-medium leading-[1.2] text-[rgba(0,0,0,0.48)]">
+                        <div className="text-[11px] font-medium leading-[1.2] text-text-muted">
                           {viewerNicheData.label}
                         </div>
                       </div>
@@ -612,7 +612,7 @@ export default function PortfolioLookbook({
                       <h3 style={{ padding: "10px 12px 2px", fontSize: "13px", fontWeight: 600, color: "#111", lineHeight: 1.3 }}>
                         {currentVideo.title}
                       </h3>
-                      <p style={{ padding: "0 12px 8px", fontSize: "11px", color: "rgba(0, 0, 0, 0.48)", lineHeight: 1.4 }}>
+                      <p style={{ padding: "0 12px 8px", fontSize: "11px", color: "var(--text-muted)", lineHeight: 1.4 }}>
                         {currentVideo.subtitle}
                       </p>
 
@@ -645,19 +645,19 @@ export default function PortfolioLookbook({
                   <button
                     type="button"
                     onClick={() => goToVideo(1)}
-                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#D8D3CB] bg-white text-[18px] text-[#000000]"
+                    className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[#D8D3CB] bg-text-inverse text-[18px] text-text-primary"
                     aria-label="Next video"
                   >
                     ›
                   </button>
-                  <div className="text-center text-[11px] leading-tight text-[rgba(0,0,0,0.48)]">
+                  <div className="text-center text-[11px] leading-tight text-text-muted">
                     Next<br />Video
                   </div>
                 </div>
               </div>
 
               <div className="md:hidden">
-                <div className="mt-4 overflow-hidden rounded-[20px] border border-[#E8E3DC] bg-white">
+                <div className="mt-4 overflow-hidden rounded-[20px] border border-bg-surface bg-text-inverse">
                   <ProgressTabs
                     count={activeVideos.length}
                     activeIndex={activeVideoIndex}
@@ -666,10 +666,10 @@ export default function PortfolioLookbook({
                   <div className="flex items-center gap-2 px-4 py-[14px]">
                     {renderLogo(selectedClientData, 26)}
                     <div className="min-w-0">
-                      <div className="truncate text-[13px] font-semibold leading-tight text-[#000000]">
+                      <div className="truncate text-[13px] font-semibold leading-tight text-text-primary">
                         {selectedClientData.name}
                       </div>
-                      <div className="text-[11px] leading-tight text-[rgba(0,0,0,0.48)]">
+                      <div className="text-[11px] leading-tight text-text-muted">
                         {viewerNicheData.label}
                       </div>
                     </div>
@@ -685,10 +685,10 @@ export default function PortfolioLookbook({
                     )}
 
                     <div className="px-4 py-[14px]">
-                      <h3 className="text-[14px] font-semibold leading-tight text-[#000000]">
+                      <h3 className="text-[14px] font-semibold leading-tight text-text-primary">
                         {currentVideo.title}
                       </h3>
-                      <p className="mt-1 text-[12px] leading-snug text-[rgba(0,0,0,0.48)]">
+                      <p className="mt-1 text-[12px] leading-snug text-text-muted">
                         {currentVideo.subtitle}
                       </p>
                     </div>
@@ -717,7 +717,7 @@ export default function PortfolioLookbook({
                   <button
                     type="button"
                     onClick={() => goToVideo(-1)}
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-[#111111] text-[20px] text-white"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-[#111111] text-[20px] text-text-inverse"
                     aria-label="Previous video"
                   >
                     ‹
@@ -725,7 +725,7 @@ export default function PortfolioLookbook({
                   <button
                     type="button"
                     onClick={() => goToVideo(1)}
-                    className="flex h-11 w-11 items-center justify-center rounded-full bg-[#111111] text-[20px] text-white"
+                    className="flex h-11 w-11 items-center justify-center rounded-full bg-[#111111] text-[20px] text-text-inverse"
                     aria-label="Next video"
                   >
                     ›

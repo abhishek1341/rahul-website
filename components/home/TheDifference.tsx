@@ -14,7 +14,7 @@ export default function TheDifference() {
   ];
 
   return (
-    <Section>
+    <Section className="difference-section">
       <Container>
         <div>
           <Reveal preset="fadeUpSpring">

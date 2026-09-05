@@ -1,37 +1,37 @@
 'use client';
 
-import Link from 'next/link';
 import Container from '../layout/Container';
-import Section from '../layout/Section';
 import Reveal from '../animations/Reveal';
+import Button from '../ui/Button';
 
 export default function GetStarted() {
   return (
-    <Section>
+    <section className="brand-band-cta">
       <Container>
         <Reveal preset="fadeUpSpring">
-          <div className="get-started-wrap">
-            <div className="get-started-cta">
-              <div className="section-label-row">
-                <span className="section-label">Get started</span>
-              </div>
-
-              <h2 className="get-started-cta-heading">
-                Your viral journey<br />
-                starts <span className="accent">right here</span>.
-              </h2>
-
-              <p className="get-started-cta-description">
-                Book a free 30 min strategy call and we&apos;ll show you how to turn followers into customers.
-              </p>
-
-              <Link href="/book-a-call" className="get-started-cta-button">
-                Book a call
-              </Link>
+          <div className="get-started-cta">
+            <div className="section-label-row">
+              <span className="section-label">Get started</span>
             </div>
+
+            <h2 className="get-started-cta-heading">
+              Your growth journey
+              <br />
+              starts <span className="accent">right here</span>.
+            </h2>
+
+            <p className="get-started-cta-description">
+              Book a free 30 min strategy call and we&apos;ll show you how to turn
+              followers into customers.
+            </p>
+
+            {/* Same Button + .btn-nav as the header "Book a call". */}
+            <Button href="tel:+919909844455" variant="primary" size="nav">
+              Book a call
+            </Button>
           </div>
         </Reveal>
       </Container>
-    </Section>
+    </section>
   );
 }

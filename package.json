@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "eslint",
     "fill-form": "tsx scripts/fill-google-form.ts",
-    "inspect-form": "tsx scripts/inspect-form.ts"
+    "inspect-form": "tsx scripts/inspect-form.ts",
+    "rename:videos": "node scripts/rename-video-files.mjs"
   },
   "dependencies": {
     "framer-motion": "^12.23.26",
