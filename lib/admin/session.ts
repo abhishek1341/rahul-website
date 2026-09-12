@@ -70,11 +70,51 @@ export async function hasValidAdminSession(request: Request): Promise<boolean> {
   return verifySessionToken(token, secret);
 }
 
+function normalizeHost(value: string | null): string | null {
+  if (!value) return null;
+  // x-forwarded-host can be a comma-separated list; take the first.
+  const host = value.split(',')[0]?.trim().toLowerCase();
+  if (!host) return null;
+  return host;
+}
+
+function trustedRequestHosts(request: Request): Set<string> {
+  const hosts = new Set<string>();
+
+  const add = (value: string | null) => {
+    const host = normalizeHost(value);
+    if (host) hosts.add(host);
+  };
+
+  // Prefer public proxy headers — request.url is often localhost behind Hostinger/hcdn.
+  add(request.headers.get('x-forwarded-host'));
+  add(request.headers.get('host'));
+
+  try {
+    add(new URL(request.url).host);
+  } catch {
+    // ignore malformed request URL
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  if (siteUrl) {
+    try {
+      add(new URL(siteUrl).host);
+    } catch {
+      // ignore malformed SITE_URL
+    }
+  }
+
+  return hosts;
+}
+
 export function assertSameOrigin(request: Request): boolean {
   const origin = request.headers.get('origin');
   if (!origin) return true;
   try {
-    return new URL(origin).host === new URL(request.url).host;
+    const originHost = normalizeHost(new URL(origin).host);
+    if (!originHost) return false;
+    return trustedRequestHosts(request).has(originHost);
   } catch {
     return false;
   }
