@@ -268,8 +268,9 @@ export default function VideoLightbox({
 
   return createPortal(
     <div className="fixed inset-0 z-[60]">
-      <div
-        aria-hidden="true"
+      <button
+        type="button"
+        aria-label="Close video"
         onClick={onClose}
         className="portfolio-lightbox-enter absolute inset-0 bg-cover bg-center"
         style={{
@@ -377,6 +378,12 @@ export default function VideoLightbox({
             <p className="mt-1 text-[14px] leading-[1.4] tracking-[-0.02em] text-text-inverse/60">
               {item.client}
             </p>
+
+            {item.description ? (
+              <p className="mt-3 text-[14px] leading-[1.45] tracking-[-0.02em] text-text-inverse/75">
+                {item.description}
+              </p>
+            ) : null}
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import Section from '../layout/Section';
 import Button from '../ui/Button';
 import Reveal from '../animations/Reveal';
 import Image from 'next/image';
+import { APPLICATION_HREF } from '@/lib/site';
 
 export default function OurTeam() {
   return (
@@ -27,7 +28,7 @@ export default function OurTeam() {
           <div className="media-frame mx-auto mb-12 md:mb-16 w-full max-w-xl md:max-w-2xl">
             <Image
               src="/team_photo.png"
-              alt="The Suntrix Media team"
+              alt="The Suntrix Media team standing together"
               width={1024}
               height={1536}
               className="h-auto w-full"
@@ -45,7 +46,7 @@ export default function OurTeam() {
                   </p>
                 </div>
                 <div className="flex justify-center md:justify-end">
-                  <Button href="mailto:suntrixmedia@gmail.com?subject=Application" variant="primary" size="nav">
+                  <Button href={APPLICATION_HREF} variant="primary" size="nav">
                     Apply now
                   </Button>
                 </div>

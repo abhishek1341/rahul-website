@@ -7,6 +7,7 @@ interface CounterProps {
   suffix?: string;
   duration?: number;
   className?: string;
+  format?: (value: number) => string;
 }
 
 export default function Counter({
@@ -14,6 +15,7 @@ export default function Counter({
   suffix = '',
   duration = 2000,
   className = '',
+  format,
 }: CounterProps) {
   // Final value in the delivered HTML so a missed intersection never shows "0K".
   const [count, setCount] = useState(value);
@@ -26,9 +28,10 @@ export default function Counter({
     if (!element) return;
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Keep the final number; defer so we don't setState synchronously in the effect body.
     if (reduced) {
-      setCount(value);
-      return;
+      const frame = requestAnimationFrame(() => setCount(value));
+      return () => cancelAnimationFrame(frame);
     }
 
     const run = () => {
@@ -80,7 +83,7 @@ export default function Counter({
   // value — during the animation itself only the bare number is shown.
   return (
     <span ref={elementRef} className={className}>
-      {count}
+      {format ? format(count) : count}
       {count >= value && suffix}
     </span>
   );

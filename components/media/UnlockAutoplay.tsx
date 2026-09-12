@@ -6,7 +6,7 @@ import { tryPlayMuted } from '@/lib/muted-autoplay';
 /**
  * iOS Safari (and Low Power Mode) often blocks the HTML autoplay attribute
  * until there has been a user gesture. The first tap anywhere retries every
- * muted preview on the page so the hero / intro / service clips start without
+ * muted preview on the page so the hero / service clips start without
  * needing a dedicated play button.
  */
 export default function UnlockAutoplay() {

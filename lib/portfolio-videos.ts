@@ -1,16 +1,15 @@
 /**
  * Server-only utility — runs at build / request time in Server Components.
- * Converts data/portfolioVideos.ts (the single source of truth for every
- * portfolio video's title and category) into PortfolioItem objects, adding
- * only the one thing that can't be hand-authored: each clip's source aspect
- * ratio, probed from the actual file so the grid knows whether it needs the
- * letterboxed (blurred-backdrop + contain) treatment.
+ * Converts the admin content store (titles, descriptions, categories) into
+ * PortfolioItem objects, adding only the one thing that can't be hand-authored:
+ * each clip's source aspect ratio, probed from the actual file so the grid
+ * knows whether it needs the letterboxed (blurred-backdrop + contain) treatment.
  */
 import fs from 'fs';
 import path from 'path';
 import { execFileSync } from 'child_process';
 import type { CategorySlug, PortfolioItem } from '@/data/portfolio';
-import { PORTFOLIO_VIDEOS } from '@/data/portfolioVideos';
+import { readSiteContent } from '@/lib/content/store';
 
 const ALL_TAB_FEATURED: CategorySlug[] = ['coffee', 'bts', 'gym', 'influencer'];
 
@@ -92,11 +91,11 @@ function publicUrlToAbsolutePath(src: string): string {
 }
 
 /**
- * Build every PortfolioItem straight from data/portfolioVideos.ts — titles
- * and categories are never inferred from a filename or folder path.
+ * Build every PortfolioItem from the admin content store — titles,
+ * descriptions and categories are never inferred from a filename or folder.
  */
 export function loadPortfolioItems(client = 'Suntrix Media'): PortfolioItem[] {
-  return PORTFOLIO_VIDEOS.flatMap((meta) => {
+  return readSiteContent().videos.flatMap((meta) => {
     const absPath = publicUrlToAbsolutePath(meta.src);
     if (!fs.existsSync(absPath)) return [];
 
@@ -105,6 +104,7 @@ export function loadPortfolioItems(client = 'Suntrix Media'): PortfolioItem[] {
     return [{
       id: meta.id,
       title: meta.title,
+      description: meta.description,
       client,
       category: meta.category,
       previewSrc: meta.src, // doubles as the grid preview loop

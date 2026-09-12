@@ -3,6 +3,7 @@
 import Container from '../layout/Container';
 import Reveal from '../animations/Reveal';
 import Button from '../ui/Button';
+import { BOOK_A_CALL_HREF } from '@/lib/site';
 
 export default function GetStarted() {
   return (
@@ -26,7 +27,7 @@ export default function GetStarted() {
             </p>
 
             {/* Same Button + .btn-nav as the header "Book a call". */}
-            <Button href="tel:+919909844455" variant="primary" size="nav">
+            <Button href={BOOK_A_CALL_HREF} variant="primary" size="nav">
               Book a call
             </Button>
           </div>

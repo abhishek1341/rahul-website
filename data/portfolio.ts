@@ -10,6 +10,7 @@ export type CategorySlug =
 export type PortfolioItem = {
   id: string;
   title: string;
+  description?: string;
   client: string;
   category: CategorySlug;
   previewSrc: string;
@@ -39,7 +40,7 @@ export const CATEGORIES: Category[] = [
   { slug: 'gym', label: 'Gym' },
   { slug: 'bts', label: 'BTS' },
   { slug: 'influencer', label: 'Influencer' },
-  { slug: 'jewelery', label: 'Jewelery' },
+  { slug: 'jewelery', label: 'Jewellery' },
   { slug: 'product', label: 'Product' },
   { slug: 'realestate', label: 'Real Estate' },
 ];

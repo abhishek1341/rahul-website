@@ -36,6 +36,12 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# Admin-generated content (seeded on first boot from existing logos/videos)
+/data/site-content.json
+/public/uploads/*
+!/public/uploads/.gitkeep
 
 # vercel
 .vercel

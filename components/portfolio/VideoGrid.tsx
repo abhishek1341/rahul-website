@@ -128,10 +128,12 @@ export default function VideoGrid({ items, categories, clientLogos = [] }: Video
     [active, items]
   );
 
-  // Reset to first page whenever the selected category changes.
-  useEffect(() => {
+  // Reset pagination when the category changes (adjust state during render).
+  const [paginationCategory, setPaginationCategory] = useState(active);
+  if (paginationCategory !== active) {
+    setPaginationCategory(active);
     setVisibleCount(PAGE_SIZE);
-  }, [active]);
+  }
 
   const paginatedItems = useMemo(
     () => visibleItems.slice(0, visibleCount),

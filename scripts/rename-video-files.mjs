@@ -4,9 +4,8 @@
  * Folder names are left untouched — only the video files themselves.
  *
  * No source file hardcodes these filenames (lib/portfolio-videos.ts scans
- * folders dynamically), except two: components/home/Hero.tsx and
- * components/layout/IntroOverlay.tsx, which are updated separately by hand
- * to match this script's mapping.
+ * folders dynamically), except data/heroStories.ts, which is updated
+ * separately by hand to match this script's mapping.
  *
  * Usage:
  *   node scripts/rename-video-files.mjs            # dry run — prints the mapping only
