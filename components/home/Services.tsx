@@ -46,6 +46,8 @@ export default function Services() {
                       <MutedAutoplayVideo
                         src={service.animation}
                         className="h-full w-full object-cover"
+                        lazy
+                        preload="none"
                       />
                     </div>
                     <h3 className="mb-4">{service.title}</h3>

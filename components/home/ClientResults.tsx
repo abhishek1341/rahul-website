@@ -6,34 +6,36 @@ import Counter from '../ui/Counter';
 import Reveal from '../animations/Reveal';
 import Stagger from '../animations/Stagger';
 import MutedAutoplayVideo from '@/components/media/MutedAutoplayVideo';
+import type { SiteResultCase } from '@/lib/content/types';
 
-export default function ClientResults() {
-  const results = [
-    {
-      title: 'Scaling a beauty brand with',
-      titleAccent: 'reels',
-      description: 'Beauty brand Glowhaus came to us with great products but low engagement. We developed a UGC-driven content strategy focused on short-form video, optimized for Reels.',
-      metrics: [
-        { value: 128, suffix: 'K', label: 'Reel Views', subtext: 'In the first 30 days' },
-        { value: 245, suffix: '%', label: 'Engagement', subtext: 'Compared to previous month' },
-      ],
-      imageLeft: false,
-      videoSrc: '/ds-reel-02.mp4',
-      poster: '/posters/ds-reel-02.jpg',
-    },
-    {
-      title: 'Growing a clothing brand with',
-      titleAccent: 'video',
-      description: 'Theo came to us ahead of a new collection launch, looking to grow their reach and build anticipation. We combined UGC with light influencer seeding and short-form video.',
-      metrics: [
-        { value: 18, suffix: 'K', label: 'Followers', subtext: 'In six weeks' },
-        { value: 156, suffix: '%', label: 'Engagement', subtext: 'Compared to previous month' },
-      ],
-      imageLeft: true,
-      videoSrc: '/bag-reel.mp4',
-      poster: '/posters/bag-reel.jpg',
-    },
-  ];
+const CASE_COPY = {
+  glowhaus: {
+    title: 'Scaling a beauty brand with',
+    titleAccent: 'reels',
+    description: 'Beauty brand Glowhaus came to us with great products but low engagement. We developed a UGC-driven content strategy focused on short-form video, optimized for Reels.',
+    imageLeft: false,
+    videoSrc: '/ds-reel-02.mp4',
+    poster: '/posters/ds-reel-02.jpg',
+  },
+  theo: {
+    title: 'Growing a clothing brand with',
+    titleAccent: 'video',
+    description: 'They came to us ahead of a new collection launch, looking to grow their reach and build anticipation. We combined UGC with light influencer seeding and short-form video.',
+    imageLeft: true,
+    videoSrc: '/bag-reel.mp4',
+    poster: '/posters/bag-reel.jpg',
+  },
+} as const;
+
+export default function ClientResults({ cases }: { cases: SiteResultCase[] }) {
+  const results = cases.flatMap((entry) => {
+    const copy = CASE_COPY[entry.id as keyof typeof CASE_COPY];
+    if (!copy) return [];
+    return [{
+      ...copy,
+      metrics: entry.metrics.filter((metric) => metric.visible),
+    }];
+  });
 
   return (
     <Section className="client-results-section">
@@ -57,22 +59,24 @@ export default function ClientResults() {
                   <Reveal preset="fadeUpSpring" useAnimate>
                     <p className="section-desktop-left mb-8">{result.description}</p>
                   </Reveal>
-                  <Reveal preset="fadeUpSpring" useAnimate>
-                    <div className="grid grid-cols-2 gap-8">
-                      {result.metrics.map((metric, metricIndex) => (
-                        <div key={metricIndex}>
-                          <div className="text-[56px] font-medium mb-2 tracking-[-0.07em] text-near-black">
-                            <Counter 
-                              value={metric.value} 
-                              suffix={metric.suffix}
-                            />
+                  {result.metrics.length > 0 ? (
+                    <Reveal preset="fadeUpSpring" useAnimate>
+                      <div className={`grid gap-8 ${result.metrics.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                        {result.metrics.map((metric) => (
+                          <div key={metric.id}>
+                            <div className="text-[56px] font-medium mb-2 tracking-[-0.07em] text-near-black">
+                              <Counter
+                                value={metric.value}
+                                suffix={metric.suffix}
+                              />
+                            </div>
+                            <div className="client-results-metric-label">{metric.label}</div>
+                            {metric.subtext ? <div className="text-secondary">{metric.subtext}</div> : null}
                           </div>
-                          <div className="client-results-metric-label">{metric.label}</div>
-                          <div className="text-secondary">{metric.subtext}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </Reveal>
+                        ))}
+                      </div>
+                    </Reveal>
+                  ) : null}
                 </Stagger>
               </div>
 
@@ -83,6 +87,8 @@ export default function ClientResults() {
                     <MutedAutoplayVideo
                       poster={result.poster}
                       className="bg-bg-surface"
+                      lazy
+                      preload="none"
                     >
                       <source src={result.videoSrc} type="video/mp4" />
                     </MutedAutoplayVideo>
