@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import type { ClientLogo } from '@/lib/client-logos';
+import { shouldBypassImageOptimizer } from '@/lib/media/image-src';
 
 // No 'use client' on purpose: the scroll is pure CSS, so this renders happily
 // inside both the server tree (app/page.tsx) and a client tree (VideoGrid).
@@ -61,6 +62,7 @@ export default function LogoMarquee({
                     sizes="180px"
                     loading="eager"
                     fetchPriority="low"
+                    unoptimized={shouldBypassImageOptimizer(logo.src)}
                     className="logo-marquee-img"
                   />
                 </span>

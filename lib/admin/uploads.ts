@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { shouldBypassImageOptimizer } from '@/lib/media/image-src';
 
 export const MAX_LOGO_BYTES = 4 * 1024 * 1024;
 export const MAX_VIDEO_BYTES = 25 * 1024 * 1024;
@@ -19,7 +20,7 @@ function extensionFor(file: File, fallback: string): string {
 }
 
 export function isUploadUrl(src: string): boolean {
-  return decodeURIComponent(src).startsWith('/uploads/');
+  return shouldBypassImageOptimizer(src);
 }
 
 export function publicUrlToAbsolute(src: string): string {

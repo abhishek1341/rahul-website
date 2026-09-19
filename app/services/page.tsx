@@ -11,6 +11,8 @@ import ServicesBand from '@/components/services/ServicesBand';
 import { loadClientLogos } from '@/lib/client-logos';
 import { OG_IMAGES, SITE_URL } from '@/lib/site';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Services',
   description:
