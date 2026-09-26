@@ -2,6 +2,7 @@ import Image from 'next/image';
 import type { CSSProperties } from 'react';
 import type { ClientLogo } from '@/lib/client-logos';
 import { shouldBypassImageOptimizer } from '@/lib/media/image-src';
+import LogoMarqueeTouch from '@/components/ui/LogoMarqueeTouch';
 
 // No 'use client' on purpose: the scroll is pure CSS, so this renders happily
 // inside both the server tree (app/page.tsx) and a client tree (VideoGrid).
@@ -36,6 +37,7 @@ export default function LogoMarquee({
       role="region"
       aria-label={label}
     >
+      <LogoMarqueeTouch />
       <div className="logo-marquee-track">
         {/* Exactly two copies, so the keyframe's -50% lands on the start of the
             second copy — pixel-identical to frame zero, hence no visible reset. */}
@@ -63,6 +65,7 @@ export default function LogoMarquee({
                     loading="eager"
                     fetchPriority="low"
                     unoptimized={shouldBypassImageOptimizer(logo.src)}
+                    draggable={false}
                     className="logo-marquee-img"
                   />
                 </span>

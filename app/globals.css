@@ -1378,6 +1378,22 @@ video {
 
 .logo-marquee-img {
   object-fit: contain;
+  /* The long-press menu ("Open image", "Copy", "Preview") is an image
+     gesture. The tile receives the touch; the bitmap does not. */
+  pointer-events: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.logo-marquee {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.logo-marquee.is-paused .logo-marquee-track {
+  animation-play-state: paused;
 }
 
 @keyframes logo-marquee-scroll {
@@ -1527,23 +1543,17 @@ video {
 }
 
 .portfolio-tile {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 310px;
-}
-
-/* Rough off-screen height estimates so skipped tiles do not misreport scroll
-   height; the tile width, and so its 9:16 height, grows with each breakpoint. */
-@media (min-width: 640px) {
-  .portfolio-tile {
-    contain-intrinsic-size: auto 460px;
-  }
+  /* Skip content-visibility. On mobile WebKit, the first scroll after a
+     tile's video starts playing promotes a layer that doesn't move with the
+     page, so the stats copy underneath paints over the cards. It only
+     happens once; later scrolls are fine. These tiles are paginated, so the
+     skip wasn't earning its keep. */
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
 }
 
 @media (min-width: 1024px) {
-  .portfolio-tile {
-    contain-intrinsic-size: auto 580px;
-  }
-
   /* Editorial stagger: drop every second column. Uses `translate` rather than
      `transform` so it composes with the hover lift below instead of replacing
      it, and it sits on the tiles while the re-flow animation runs on their
@@ -1563,16 +1573,19 @@ video {
 
 .portfolio-tile {
   transition: transform 200ms ease;
+  /* One layer for the card and its video, so the first play doesn't leave
+     a video plane that stays put while the page scrolls under it. */
+  transform: translateZ(0);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .portfolio-tile:hover {
-    transform: scale(1.02);
+    transform: translateZ(0) scale(1.02);
   }
 }
 
 .portfolio-tile:active {
-  transform: scale(1.02);
+  transform: translateZ(0) scale(1.02);
 }
 
 @media (prefers-reduced-motion: reduce) {
